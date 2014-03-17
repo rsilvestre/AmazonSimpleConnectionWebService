@@ -2,6 +2,7 @@
 using System.ServiceModel;
 using Simple.Amazon.ECS;
 using System.Configuration;
+using System.Net;
 
 namespace Simple {
 	class Program {
@@ -25,7 +26,7 @@ namespace Simple {
 			ItemLookupRequest request2 = new ItemLookupRequest();
 			request2.ItemId = new String[] { "2817801997" };
 			request2.IdType = ItemLookupRequestIdType.ISBN;
-			request2.ResponseGroup = new String[] { "Small" };
+			request2.ResponseGroup = new String[] { "Medium" };
 			request2.IdTypeSpecified = true;
 			request2.SearchIndex = "Books";
 
@@ -37,6 +38,16 @@ namespace Simple {
 			ItemLookupResponse response2 = client.ItemLookup(itemLookup);
 
 			foreach (var item in response2.Items[0].Item) {
+				// Create a web request to the URL for the picture
+				System.Net.WebRequest webRequest = HttpWebRequest.Create(item.MediumImage.URL);
+				// Execute the request synchronuously
+				HttpWebResponse webResponse = (HttpWebResponse)webRequest.GetResponse();
+
+				// Create an image from the stream returned by the web request
+				//pCover.Image = new System.Drawing.Bitmap(webResponse.GetResponseStream());
+
+				// Finally, close the request
+				webResponse.Close();
 				Console.WriteLine(item.ItemAttributes.Title);
 			}
 
