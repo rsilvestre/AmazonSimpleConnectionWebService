@@ -22,6 +22,24 @@ namespace Simple {
 			// add authentication to the ECS client
 			client.ChannelFactory.Endpoint.Behaviors.Add(new AmazonSigningEndpointBehavior(accessKeyId, secretKey));
 
+			ItemLookupRequest request2 = new ItemLookupRequest();
+			request2.ItemId = new String[] { "2817801997" };
+			request2.IdType = ItemLookupRequestIdType.ISBN;
+			request2.ResponseGroup = new String[] { "Small" };
+			request2.IdTypeSpecified = true;
+			request2.SearchIndex = "Books";
+
+			ItemLookup itemLookup = new ItemLookup();
+			itemLookup.Request = new ItemLookupRequest[] { request2 };
+			itemLookup.AWSAccessKeyId = accessKeyId;
+			itemLookup.AssociateTag = "213";
+
+			ItemLookupResponse response2 = client.ItemLookup(itemLookup);
+
+			foreach (var item in response2.Items[0].Item) {
+				Console.WriteLine(item.ItemAttributes.Title);
+			}
+
 			// prepare an ItemSearch request
 			ItemSearchRequest request	= new ItemSearchRequest();
 			request.SearchIndex			= "Books";
