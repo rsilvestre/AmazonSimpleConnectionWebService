@@ -27,3 +27,5 @@ Initialization
 
 3. Compile
 
+4. Visite [this source of knowledge](http://docs.aws.amazon.com/AWSECommerceService/latest/DG/Welcome.html "Product Advertising API")
+
